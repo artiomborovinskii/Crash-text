@@ -1,26 +1,19 @@
-// Select the parent element where the ad video block can appear
-const parentElement = document.getElementById('parent-element-id');
+document.addEventListener('DOMContentLoaded', function(
+) {
+  setInterval(function(
+) {
+    const adVideoBlocks = document.querySelectorAll('.ad-video-block');
 
-// Create a new MutationObserver
-const observer = new MutationObserver((mutationsList, observer) => {
-  // Check if the ad video block exists in the mutations
-  for (const mutation of mutationsList) {
-    if (mutation.addedNodes) {
-      for (const node of mutation.addedNodes) {
-        if (node.classList && node.classList.contains('ad-video-block')) {
-          node.remove();
-          break;
-        }
+    adVideoBlocks.forEach(function(adVideoBlock) {
+      function hideAd(
+) {
+        adVideoBlock.style.display = 'none';
+        adVideoBlock.removeEventListener('animationstart', hideAd);
+        adVideoBlock.removeEventListener('webkitAnimationStart', hideAd);
       }
-    }
-  }
+
+      adVideoBlock.addEventListener('animationstart', hideAd);
+      adVideoBlock.addEventListener('webkitAnimationStart', hideAd);
+    });
+  }, 1000); // Adjust the interval as needed (1000ms = 1 second)
 });
-
-// Configure the observer to watch for changes in the parent element
-observer.observe(parentElement, { childList: true, subtree: true });
-
-// Restart the observer every 5 seconds
-setInterval(() => {
-  observer.disconnect();
-  observer.observe(parentElement, { childList: true, subtree: true });
-}, 5000);
